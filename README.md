@@ -35,6 +35,7 @@ This project is a mobile e-commerce application developed using React Native, Ty
 - **State:** Management: Redux Toolkit
 - **Data:** Storage: AsyncStorage
 - **API:** Mock API (https://5fc9346b2af77700165ae514.mockapi.io/products)
+- **Testing:** Jest
 
 # Features
 - **Product Actions:** Add, remove, increase, and decrease product quantities.
