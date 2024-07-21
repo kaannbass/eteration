@@ -20,6 +20,7 @@ export function HomeStackScreen() {
             <HomeStack.Screen
                 name="ProductDetail"
                 component={ProductDetailScreen}
+                options={{ headerShown: false }}
             />
         </HomeStack.Navigator>
     );

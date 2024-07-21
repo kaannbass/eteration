@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useEffect } from 'react';
+import React, { memo, useMemo, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card as PaperCard, Text } from 'react-native-paper';
 import { useFavorite, useProductHook } from '../../hooks';
@@ -12,12 +12,16 @@ interface ProductCardProps {
   iconVisible?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress = () => {}, iconVisible = true }) => {
+const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress = () => { }, iconVisible = true }) => {
   const { handleAddToCard, handleRemoveFromCard, handleIncreaseQuantity, currentQuantity } = useProductHook(product);
   const { isFavorite, toggleFavorite } = useFavorite(product);
 
-  // Memoization of formatted price
   const formattedPrice = useMemo(() => Number(product.price).toFixed(2), [product.price]);
+
+  const handleImageToggleFavorite = useCallback(() => toggleFavorite(), [toggleFavorite]);
+  const handleActionsAddToCart = useCallback(() => handleAddToCard(), [handleAddToCard]);
+  const handleActionsRemoveFromCart = useCallback(() => handleRemoveFromCard(), [handleRemoveFromCard]);
+  const handleActionsIncreaseQuantity = useCallback(() => handleIncreaseQuantity(), [handleIncreaseQuantity]);
 
   return (
     <PaperCard style={styles.card} onPress={onPress} testID="product-card">
@@ -25,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress = () =>
         <ProductImage
           imageUri={product.image}
           isFavorite={isFavorite}
-          onToggleFavorite={toggleFavorite}
+          onToggleFavorite={handleImageToggleFavorite}
           iconVisible={iconVisible}
           testID="product-image"
         />
@@ -35,9 +39,9 @@ const ProductCard: React.FC<ProductCardProps> = memo(({ product, onPress = () =>
         </View>
         <ProductActions
           quantity={currentQuantity}
-          onAdd={handleAddToCard}
-          onRemove={handleRemoveFromCard}
-          onIncrease={handleIncreaseQuantity}
+          onAdd={handleActionsAddToCart}
+          onRemove={handleActionsRemoveFromCart}
+          onIncrease={handleActionsIncreaseQuantity}
           testID="product-actions"
         />
       </View>

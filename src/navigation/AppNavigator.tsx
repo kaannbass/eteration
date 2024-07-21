@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ProductBuyScreen, ProductFavoriteListScreen, AccountScreen } from '../screens';
@@ -35,13 +35,17 @@ const getTabBarIcon = (routeName: string, focused: boolean, color: string, size:
 
 const HomeTabs: React.FC = () => {
     const { cartItemCount } = useCart();
+    const { colors } = useTheme();
 
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => getTabBarIcon(route.name, focused, color, size),
                 tabBarLabel: ({ focused, color }) => null,
-                headerShown: false
+                headerShown: false,
+                tabBarStyle: { backgroundColor: colors.background },
+                tabBarActiveTintColor: colors.primary,
+                tabBarInactiveTintColor: '#888888',
             })}
         >
             <Tab.Screen name="Home" component={HomeStackScreen} />
@@ -67,6 +71,5 @@ const AppContainer: React.FC = () => {
         </NavigationContainer>
     );
 };
-
 
 export default AppContainer;

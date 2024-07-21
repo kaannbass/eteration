@@ -20,7 +20,7 @@ export const DarkSchema: ColorTheme = {
     onErrorContainer: "rgb(255, 180, 171)",
     background: "rgb(29, 27, 30)",
     onBackground: "rgb(231, 225, 229)",
-    surface: "rgb(29, 27, 30)",
+    surface: "rgb(255, 251, 255)",
     onSurface: "rgb(231, 225, 229)",
     surfaceVariant: "rgb(74, 69, 78)",
     onSurfaceVariant: "rgb(204, 196, 206)",

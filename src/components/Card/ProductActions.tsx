@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { Button } from 'react-native-paper';
-
+import { View, StyleSheet, StyleProp, ViewStyle, Dimensions } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 interface ProductActionsProps {
     quantity: number;
     onAdd: () => void;
@@ -9,11 +8,11 @@ interface ProductActionsProps {
     onIncrease: () => void;
     style?: StyleProp<ViewStyle>;
 }
-
+const { width } = Dimensions.get('window');
 const ProductActions: React.FC<ProductActionsProps> = ({ quantity, onAdd, onRemove, onIncrease, style }) => (
     <View style={styles.actionsContainer}>
         {quantity <= 0 ? (
-            <Button onPress={onAdd}>Add To Card</Button>
+            <Button onPress={onAdd} style={{ width: width - 230 }}>Add To Card</Button>
         ) : (
             <>
                 <Button style={style} onPress={onRemove}>-</Button>

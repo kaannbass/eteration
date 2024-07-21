@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal } from 'react-native';
-import { RadioButton, Button } from 'react-native-paper';
+import { RadioButton, Button, useTheme } from 'react-native-paper';
 
 interface FilterModalProps {
   visible: boolean;
@@ -10,47 +10,48 @@ interface FilterModalProps {
   onApply: () => void;
 }
 
-const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, sortOrder, onSortOrderChange, onApply }) => (
-  <Modal
-    visible={visible}
-    onRequestClose={onClose}
-    transparent={true}
-  >
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>Sort by Price</Text>
-        <View style={styles.radioButtonContainer}>
-          <View style={styles.radioButtonItem}>
-            <RadioButton
-              value="asc"
-              status={sortOrder === 'asc' ? 'checked' : 'unchecked'}
-              onPress={() => onSortOrderChange('asc')}
-            />
-            <Text>Price Low to High</Text>
+const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, sortOrder, onSortOrderChange, onApply }) => {
+  const { colors } = useTheme();
+  
+  return (
+    <Modal
+      visible={visible}
+      onRequestClose={onClose}
+      transparent={true}
+    >
+      <View style={[styles.modalContainer]}>
+        <View style={[styles.modalContent, { backgroundColor: colors.background }]}>
+          <Text style={[styles.modalTitle, { color: colors.onSurface }]}>Sort by Price</Text>
+          <View style={styles.radioButtonContainer}>
+            <View style={styles.radioButtonItem}>
+              <RadioButton
+                value="asc"
+                status={sortOrder === 'asc' ? 'checked' : 'unchecked'}
+                onPress={() => onSortOrderChange('asc')}
+              />
+              <Text style={{ color: colors.onSurface }}>Price Low to High</Text>
+            </View>
+            <View style={styles.radioButtonItem}>
+              <RadioButton
+                value="desc"
+                status={sortOrder === 'desc' ? 'checked' : 'unchecked'}
+                onPress={() => onSortOrderChange('desc')}
+              />
+              <Text style={{ color: colors.onSurface }}>Price High to Low</Text>
+            </View>
           </View>
-          <View style={styles.radioButtonItem}>
-            <RadioButton
-              value="desc"
-              status={sortOrder === 'desc' ? 'checked' : 'unchecked'}
-              onPress={() => onSortOrderChange('desc')}
-            />
-            <Text>Price High to Low</Text>
-          </View>
+          <Button
+            mode="contained"
+            onPress={onApply}
+            style={styles.applyButton}
+          >
+            Apply
+          </Button>
         </View>
-        <Button
-          mode="contained"
-          onPress={() => {
-            onApply();
-            onClose();
-          }}
-          style={styles.applyButton}
-        >
-          Apply
-        </Button>
       </View>
-    </View>
-  </Modal>
-);
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   },
   applyButton: {
     marginTop: 10,
+    width:'100%'
   },
 });
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import ProductImage from '../components/Card/ProductImage';
-import { Text } from 'react-native-paper';
+import { Appbar, Text, useTheme } from 'react-native-paper';
 import { HStack, ProductActions } from '../components';
 import { RootStackParamList } from '../types/NavigationTypes';
 import { useFavorite, useProductHook } from '../hooks';
@@ -12,19 +12,24 @@ const { width } = Dimensions.get('window');
 const ProductDetailScreen: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
   const { product } = route.params ?? {};
+  const navigation = useNavigation();
+  const { colors } = useTheme();
 
   if (!product) {
-    return <Text>Product not found</Text>;
+    return <Text style={{ color: colors.error }}>Product not found</Text>;
   }
 
   const { handleAddToCard, handleRemoveFromCard, handleIncreaseQuantity, currentQuantity } = useProductHook(product);
-
   const { isFavorite, toggleFavorite } = useFavorite(product);
 
   const formattedPrice = Number(product.price).toFixed(2);
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
+  return (<>
+    <Appbar.Header style={{ backgroundColor: colors.background }}>
+      <Appbar.BackAction onPress={() => { navigation.goBack() }} />
+      <Appbar.Content title="Product Detail" />
+    </Appbar.Header>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.imageContainer}>
         <ProductImage
           imageUri={product.image}
@@ -33,10 +38,10 @@ const ProductDetailScreen: React.FC = () => {
           iconVisible={true}
         />
       </View>
-      <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.description}>{product.description}</Text>
+      <Text style={[styles.title, { color: colors.surface }]}>{product.name}</Text>
+      <Text style={[styles.description, { color: colors.surface }]}>{product.description}</Text>
       <HStack style={styles.actionsContainer}>
-        <Text style={styles.price}>Price: ${formattedPrice}</Text>
+        <Text style={[styles.price, { color: colors.primary }]}>Price: ${formattedPrice}</Text>
         <ProductActions
           quantity={currentQuantity}
           onAdd={handleAddToCard}
@@ -45,6 +50,7 @@ const ProductDetailScreen: React.FC = () => {
         />
       </HStack>
     </ScrollView>
+  </>
   );
 };
 

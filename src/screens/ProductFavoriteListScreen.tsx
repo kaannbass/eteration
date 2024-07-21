@@ -1,15 +1,16 @@
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomCard from '../components/Card/ProductCard';
-import { Text } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
 
 const FAVORITES_KEY = '@favorites';
 
 const ProductFavoriteListScreen: React.FC = () => {
   const [favorites, setFavorites] = useState<any[]>([]);
-
+  const { colors } = useTheme()
   const loadFavorites = useCallback(async () => {
     try {
       const favoritesJSON = await AsyncStorage.getItem(FAVORITES_KEY);
@@ -46,12 +47,12 @@ const ProductFavoriteListScreen: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={styles.title}>Favorite Products</Text>
       {favorites.length === 0 ? (
         <Text>No favorite products found.</Text>
       ) : (
-        <FlatList
+        <FlashList
           data={favorites}
           keyExtractor={(item) => item.id ? item.id.toString() : 'unknown'}
           renderItem={renderItem}

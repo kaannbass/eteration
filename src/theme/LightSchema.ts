@@ -1,5 +1,5 @@
-
 import { ColorTheme } from '../types/theme-types'
+
 export const LightSchema: ColorTheme = {
   colors: {
     primary: "rgb(0,	174,	239)",
@@ -20,7 +20,7 @@ export const LightSchema: ColorTheme = {
     onErrorContainer: "rgb(65, 0, 2)",
     background: "rgb(255, 251, 255)",
     onBackground: "rgb(29, 27, 30)",
-    surface: "rgb(255, 251, 255)",
+    surface: "rgb(29, 27, 30)",
     onSurface: "rgb(29, 27, 30)",
     surfaceVariant: "rgb(233, 223, 235)",
     onSurfaceVariant: "rgb(74, 69, 78)",

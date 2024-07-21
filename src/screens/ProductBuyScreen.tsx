@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, Image, Button, Alert, Modal } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, FlatList, StyleSheet, Image, Alert, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootState } from '../store';
@@ -9,9 +9,10 @@ import { CartItem } from '../types';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Text } from 'react-native-paper';
+import { Text, useTheme, Button } from 'react-native-paper';
 
 const ProductBuyScreen: React.FC = () => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const { isLoggedIn } = useAuth();
   const cartItems = useSelector((state: RootState) => state.card.cardItems);
@@ -128,18 +129,15 @@ const ProductBuyScreen: React.FC = () => {
 
   const renderItem = ({ item }: { item: CartItem }) => {
     return (
-      <View style={styles.itemContainer}>
+      <View style={[styles.itemContainer, { backgroundColor: colors.background }]}>
         <HStack>
           {item.image && <Image source={{ uri: item.image }} style={styles.image} />}
           <VStack style={{ justifyContent: 'center', alignContent: 'center', marginHorizontal: 5, gap: 5 }}>
             <View>
-              <Text variant="bodyMedium">Name: {item.name}</Text>
-              <Text variant="bodyLarge">
-                Price: <Text variant="bodyLarge" style={{ color: 'black', fontWeight: 'bold' }}> ${item.price}</Text>
+              <Text variant="bodyMedium"> Name: {item.name}</Text>
+              <Text variant="bodyLarge" style={{ marginLeft: 4 }}>
+                Price: <Text variant="bodyLarge" style={{ color: colors.primary, fontWeight: 'bold' }}> ${item.price}</Text>
               </Text>
-            </View>
-            <View>
-
             </View>
             <ProductActions
               quantity={item.quantity}
@@ -155,25 +153,29 @@ const ProductBuyScreen: React.FC = () => {
 
   if (cartItems.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text variant="headlineMedium">Your Cart is Empty</Text>
-        <Text variant="titleLarge" style={{ marginTop: 10 }}>Please add items to your cart before proceeding.</Text>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={styles.title}>Your Cart is Empty</Text>
+        <Text>Please add items to your cart before proceeding.</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={styles.title}>Cart Items</Text>
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.productId ?? item.name ?? Math.random().toString()}
         renderItem={renderItem}
       />
-      <View style={styles.footer}>
+
+      <HStack style={{ justifyContent: 'space-between' }}>
         <Text style={styles.totalPrice}>Total Price: ${totalPrice.toFixed(2)}</Text>
-        <Button title="Complete" onPress={handleComplete} />
-      </View>
+        <Button
+          onPress={handleComplete}
+          mode="contained"
+        >Complete</Button>
+      </HStack>
 
       <Modal
         visible={isModalVisible}
@@ -185,7 +187,7 @@ const ProductBuyScreen: React.FC = () => {
         }}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: colors.background }]}>
             <Text style={styles.modalTitle}>Success</Text>
             <Text style={styles.modalMessage}>Your purchase was completed successfully! Please wait {countdown} seconds.</Text>
           </View>
@@ -215,13 +217,6 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 0,
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
-  },
   totalPrice: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -236,7 +231,6 @@ const styles = StyleSheet.create({
     width: 300,
     padding: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
     alignItems: 'center',
   },
   modalTitle: {
@@ -246,18 +240,7 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 16,
-    marginBottom: 20,
-  },
-  okButton: {
-    marginTop: 10,
-    padding: 10,
-    backgroundColor: '#007bff',
-    borderRadius: 5,
-  },
-  okButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
